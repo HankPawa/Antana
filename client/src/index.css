@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+    background-image: var(--tw-gradient-stops, none), url("/images/paper-grain.svg");
+    background-blend-mode: multiply;
+    background-repeat: repeat;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+
+  /* Anillos de foco visibles y de marca — nunca los quitamos, solo los re-estilizamos. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-kraft-dark ring-offset-2 ring-offset-paper;
+  }
+}
+
+@layer utilities {
+  .border-dashed-warm {
+    border-style: dashed;
+    border-color: theme("colors.border");
+  }
+
+  /* Rotación "imperfecta" sutil para tarjetas — parte del estilo Anti-Polish/Raw.
+     Solo desde `sm`: en mobile las tarjetas ocupan el ancho completo y la rotación
+     hace que las esquinas sobresalgan del viewport, causando scroll horizontal. */
+  @media (min-width: 640px) {
+    .tilt-sm {
+      transform: rotate(-1.5deg);
+    }
+    .tilt-sm-rev {
+      transform: rotate(1.5deg);
+    }
+  }
+
+  /* Llama doodle parpadeante — dos capas (silueta + núcleo) que oscilan a ritmos
+     ligeramente distintos para simular el parpadeo irregular de una brasa real. */
+  .animate-flame-outer {
+    animation: flame-flicker-outer 1.6s ease-in-out infinite;
+  }
+  .animate-flame-inner {
+    animation: flame-flicker-inner 1.1s ease-in-out infinite;
+  }
+}
+
+@keyframes flame-flicker-outer {
+  0%, 100% { transform: scaleY(1) scaleX(1) rotate(-2deg); }
+  35% { transform: scaleY(1.07) scaleX(0.97) rotate(1deg); }
+  65% { transform: scaleY(0.96) scaleX(1.02) rotate(-1deg); }
+}
+
+@keyframes flame-flicker-inner {
+  0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.85; }
+  50% { transform: scaleY(0.88) translateY(1.5px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .tilt-sm,
+  .tilt-sm-rev {
+    transform: none !important;
+  }
+}
